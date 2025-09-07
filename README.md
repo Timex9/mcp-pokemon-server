@@ -52,7 +52,7 @@ Follow these steps to set up and run the project locally.
 ```bash
 git clone https://github.com/Timex9/mcp-pokemon-server.git
 cd mcp-pokemon-server
-```
+```bash
 
 ### 2. Create and Activate Virtual Environment
 ```bash
@@ -63,12 +63,12 @@ source venv/bin/activate
 # For Windows
 python -m venv venv
 .\venv\Scripts\activate
-```
+```bash
 
 ### 3. Install Dependencies
 ```bash
 pip install -r requirements.txt
-```
+```bash
 
 
 ## 🕹️ How to Use
@@ -77,7 +77,7 @@ pip install -r requirements.txt
 With your virtual environment active, start the FastAPI server from the root project directory:
 ```bash
 uvicorn app.main:app --reload
-```
+```bash
 The server will be running at `http://127.0.0.1:8000`.
 
 ### 2. Use the Web Interface (Recommended)
@@ -93,5 +93,5 @@ For a command-line experience:
 * Run the viewer script:
     ```bash
     python battle_viewer.py
-    ```
+    ```bash
 * Follow the on-screen menu to select your fighters.# mcp-pokemon-server
