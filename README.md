@@ -89,9 +89,10 @@ This is the primary way to interact with the application.
 ### 3. Use the Interactive Terminal Viewer
 For a command-line experience:
 * Make sure the server is running.
-* Open a **new** terminal window, navigate to the project folder **(cd mcp_pokemon_server)**, and activate the virtual environment.
-* Run the viewer script:
+* Open a **new** terminal window, run the following code in new terminal window make sure earlier terminal window is open and server is running.
     ```bash
+    cd mcp-pokemon-server
+    pip install -r requirements.txt
     python battle_viewer.py
     ```bash
 * Follow the on-screen menu to select your fighters.# mcp-pokemon-server
