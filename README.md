@@ -49,6 +49,7 @@ Important Tip: During installation on Windows, make sure to check the box that s
 Follow these steps to set up and run the project locally.
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/Timex9/mcp-pokemon-server.git
 cd mcp-pokemon-server
