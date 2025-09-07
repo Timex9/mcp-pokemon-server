@@ -50,16 +50,6 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-### 4. Set Up Your Gemini API Key (Required for LLM Mode)
-This project uses the Google Gemini API to power the "Player vs. LLM" mode.
-
-1.  Get a free API key from **Google AI Studio**.
-2.  Open the file `app/llm_player.py`.
-3.  Paste your key into the `API_KEY` variable at the top of the file:
-    ```python
-    API_KEY = 'YOUR_API_KEY_HERE'
-    ```
-4.  Save the file.
 
 ## 🕹️ How to Use
 
