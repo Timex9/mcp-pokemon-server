@@ -38,10 +38,10 @@ def display_battle_art(p1, p2):
     time.sleep(2)
 
 def watch_battle(p1, p2):
-    """Prints the battle log with colors and styles."""
+    """Prints the battle log with colors and styles, understanding the new format."""
     console.print("\nConnecting to the battle server...", style="yellow")
     try:
-        # Note: This endpoint is for a random battle, not the LLM one.
+        # The terminal viewer should call the simple /tool/battle endpoint
         response = requests.post(f"http://127.0.0.1:8000/tool/battle?pokemon1={p1}&pokemon2={p2}")
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
@@ -52,13 +52,18 @@ def watch_battle(p1, p2):
     if data.get("error"):
         console.print(f"Server Error: {data['error']}", style="bold red")
         return
-    
+
     console.print("\n--- Battle Starting! ---\n", style="bold magenta")
     time.sleep(1)
-    
-    # This logic assumes the 'log' is a simple list of strings from your basic battle endpoint
-    if isinstance(data.get("log"), list):
-        for line in data["log"]:
+
+    # --- UPDATED LOGIC HERE ---
+    # Check for the new "turns" key which is a list of dictionaries
+    if isinstance(data.get("turns"), list):
+        # Iterate through each turn object in the list
+        for turn in data["turns"]:
+            line = turn["text"] # Extract the commentary text from the turn object
+
+            # The color logic is the same as before
             if "super effective" in line:
                 console.print(line, style="bold green")
             elif "not very effective" in line:
@@ -70,12 +75,12 @@ def watch_battle(p1, p2):
             else:
                 console.print(line)
             time.sleep(1.5)
-        
+
         console.print("\n--- Battle Over! ---", style="bold magenta")
         console.print(f"🏆 The winner is {data['winner'].title()}! 🏆", style="bold yellow on blue")
     else:
+        # This is the error message you were seeing
         console.print("Received an unexpected battle log format from the server.", style="bold red")
-
 
 def main():
     """Main function to run the interactive menu."""
