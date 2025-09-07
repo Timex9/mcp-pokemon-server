@@ -5,5 +5,5 @@ questionary
 requests
 rich
 jinja2
-python-multipar
+python-multipart
 google-generativeai
