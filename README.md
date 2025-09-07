@@ -51,7 +51,7 @@ Follow these steps to set up and run the project locally.
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/Timex9/mcp-pokemon-server.git
-cd mcp_pokemon_server
+cd mcp-pokemon-server
 ```
 
 ### 2. Create and Activate Virtual Environment
