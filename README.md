@@ -84,4 +84,4 @@ For a command-line experience:
     ```bash
     python battle_viewer.py
     ```
-* Follow the on-screen menu to select your fighters.
+* Follow the on-screen menu to select your fighters.# mcp-pokemon-server
