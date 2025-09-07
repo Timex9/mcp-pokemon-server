@@ -12,7 +12,7 @@ This project goes far beyond a simple simulation and includes a wide range of ad
     * **Real Moves**: Pokémon select from their actual move sets fetched from the PokéAPI.
     * **Physical vs. Special Attacks**: The damage calculator correctly uses `Attack`/`Defense` for physical moves and `Special-Attack`/`Special-Defense` for special moves.
     * **Type Effectiveness** and **Status Effects** (Paralysis, Burn, Poison).
-* **Player vs. LLM Mode**: A special battle mode where one of the Pokémon is controlled by the **Google Gemini LLM**, which makes strategic move choices.
+* **Player vs. LLM Mode**: A special battle mode where one of the Pokémon is controlled by the **Google Gemini LLM**, which makes strategic move choices and other Pokémon chooses its moves completely randomly.
 * **Interactive Terminal Viewer**: For users who prefer the command line, an interactive viewer built with `rich` and `questionary` provides a colorful, menu-driven battle experience.
 * **Core MCP API**: The underlying API provides a resource to get detailed data on any Pokémon.
 
@@ -25,6 +25,26 @@ This project goes far beyond a simple simulation and includes a wide range of ad
 * **API Communication**: HTTPX
 
 ## 🚀 Setup and Installation
+
+Project Prerequisites
+
+1.⁠ ⁠Git 
+
+This is the version control tool needed to download (clone) the project's code from a GitHub repository.
+
+Purpose: To run the git clone command.
+
+Download Link: https://git-scm.com/downloads
+
+2.⁠ ⁠Python 
+
+This is the programming language the entire project is written in.
+
+Purpose: To run the FastAPI server and all the Python scripts.
+
+Download Link: https://www.python.org/downloads/
+
+Important Tip: During installation on Windows, make sure to check the box that says "Add Python to PATH".
 
 Follow these steps to set up and run the project locally.
 
@@ -69,7 +89,7 @@ This is the primary way to interact with the application.
 ### 3. Use the Interactive Terminal Viewer
 For a command-line experience:
 * Make sure the server is running.
-* Open a **new** terminal window, navigate to the project folder, and activate the virtual environment.
+* Open a **new** terminal window, navigate to the project folder **(cd mcp_pokemon_server)**, and activate the virtual environment.
 * Run the viewer script:
     ```bash
     python battle_viewer.py
