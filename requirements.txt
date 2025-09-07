@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+httpx
+questionary
+requests
+rich
+simpleaudio
+jinja2
+python-multipart
+google-generativeai

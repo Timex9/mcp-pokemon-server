@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Battle Simulator</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f0f0f0; color: #333; max-width: 900px; margin: 20px auto; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1, h2 { text-align: center; color: #e44d26; }
+        .battle-arena { display: flex; justify-content: space-around; align-items: flex-start; margin: 20px 0; }
+        .fighter { text-align: center; width: 45%; }
+        .fighter img { width: 128px; height: 128px; image-rendering: pixelated; /* Makes the sprites look sharp */ }
+        .health-bar-container { width: 100%; height: 20px; background-color: #ddd; border-radius: 5px; border: 1px solid #aaa; margin-top: 10px; }
+        .health-bar { height: 100%; background-color: #4ade80; border-radius: 4px; transition: width 0.5s ease-in-out; }
+        .stats-box { font-size: 12px; text-align: left; background-color: #f9f9f9; border: 1px solid #eee; padding: 10px; margin-top: 10px; border-radius: 5px; }
+        .stats-box div { display: flex; justify-content: space-between; padding: 2px 0; }
+        .battle-log { background-color: #ffffff; color: #333; border: 1px solid #ddd; border-radius: 5px; padding: 15px; font-family: monospace; min-height: 150px; max-height: 200px; overflow-y: auto; text-align: left; }
+        .winner { text-align: center; font-size: 24px; font-weight: bold; color: #16a34a; margin-top: 20px; visibility: hidden; }
+        form { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .selectors { display: flex; justify-content: center; align-items: center; gap: 20px; }
+        select { padding: 10px; font-size: 16px; border-radius: 5px; }
+        .buttons { display: flex; gap: 10px; }
+        button { padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; }
+        .btn-normal { background-color: #3b82f6; color: white; }
+        .btn-llm { background-color: #8b5cf6; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Pokémon Battle Simulator</h1>
+
+    {% if not battle_result %}
+    <form id="battle-form" method="post">
+        <div class="selectors">
+            <select name="pokemon1">
+                {% for pokemon in pokemon_list %} <option value="{{ pokemon }}">{{ pokemon.title() }}</option> {% endfor %}
+            </select>
+            <h2>VS</h2>
+            <select name="pokemon2">
+                {% for pokemon in pokemon_list %} <option value="{{ pokemon }}">{{ pokemon.title() }}</option> {% endfor %}
+            </select>
+        </div>
+        <div class="buttons">
+            <button type="button" id="normal-battle-btn" class="btn-normal">Player vs. Player</button>
+            <button type="button" id="llm-battle-btn" class="btn-llm">Player vs. LLM</button>
+        </div>
+    </form>
+    {% endif %}
+
+    {% if battle_result %}
+    <div class="battle-arena">
+        <div class="fighter">
+            <h2>{{ battle_result.p1_initial.name }}</h2>
+            <img src="{{ battle_result.p1_initial.sprite }}" alt="{{ battle_result.p1_initial.name }}">
+            <div class="health-bar-container">
+                <div id="p1-health" class="health-bar" style="width: 100%;"></div>
+            </div>
+            <div class="stats-box">
+                {% for stat in battle_result.p1_initial.stats %}
+                <div><span>{{ stat.name.replace('-', ' ').title() }}:</span><strong>{{ stat.value }}</strong></div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="fighter">
+            <h2>{{ battle_result.p2_initial.name }}</h2>
+            <img src="{{ battle_result.p2_initial.sprite }}" alt="{{ battle_result.p2_initial.name }}">
+            <div class="health-bar-container">
+                <div id="p2-health" class="health-bar" style="width: 100%;"></div>
+            </div>
+            <div class="stats-box">
+                {% for stat in battle_result.p2_initial.stats %}
+                <div><span>{{ stat.name.replace('-', ' ').title() }}:</span><strong>{{ stat.value }}</strong></div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <div id="battle-log-display" class="battle-log"></div>
+    <div id="winner-display" class="winner">🏆 Winner: {{ battle_result.winner.title() }} 🏆</div>
+    <div style="text-align: center; margin-top: 20px;"><a href="/"><button class="btn-normal">New Battle</button></a></div>
+    {% endif %}
+
+    <script>
+        const battleForm = document.getElementById('battle-form');
+        const normalButton = document.getElementById('normal-battle-btn');
+        const llmButton = document.getElementById('llm-battle-btn');
+        
+        if (normalButton) {
+            normalButton.addEventListener('click', function() {
+                battleForm.action = '/battle-pvp';
+                battleForm.submit();
+            });
+        }
+
+        if (llmButton) {
+            llmButton.addEventListener('click', function() {
+                battleForm.action = '/battle-llm';
+                battleForm.submit();
+            });
+        }
+        
+        {% if battle_result %}
+        const battleTurns = {{ battle_result.turns|tojson }};
+        const winnerDisplay = document.getElementById('winner-display');
+        const logDisplay = document.getElementById('battle-log-display');
+        const p1HealthBar = document.getElementById('p1-health');
+        const p2HealthBar = document.getElementById('p2-health');
+
+        logDisplay.innerHTML = '';
+
+        function showNextTurn() {
+            if (battleTurns.length > 0) {
+                const nextTurn = battleTurns.shift();
+                logDisplay.innerHTML += nextTurn.text + '<br>';
+                logDisplay.scrollTop = logDisplay.scrollHeight;
+                p1HealthBar.style.width = nextTurn.p1_hp_percent + '%';
+                p2HealthBar.style.width = nextTurn.p2_hp_percent + '%';
+            } else {
+                winnerDisplay.style.visibility = 'visible';
+                clearInterval(battleInterval);
+            }
+        }
+        const battleInterval = setInterval(showNextTurn, 2000);
+        {% endif %}
+    </script>
+</body>
+</html>
