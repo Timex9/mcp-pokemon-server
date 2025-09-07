@@ -1,10 +1,9 @@
-# app/poke_api.py
+#poke_api.py
 import httpx
 import json
 
 POKEAPI_BASE_URL = "https://pokeapi.co/api/v2/"
 
-# A simple in-memory cache to store the list of Pokémon names
 pokemon_list_cache = []
 
 async def get_all_pokemon_names():
@@ -13,7 +12,6 @@ async def get_all_pokemon_names():
     if pokemon_list_cache:
         return pokemon_list_cache
 
-    # PokéAPI can return the full list if we set a high limit
     url = f"{POKEAPI_BASE_URL}pokemon?limit=1302"
     async with httpx.AsyncClient() as client:
         try:

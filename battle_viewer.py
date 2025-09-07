@@ -24,6 +24,7 @@ def display_battle_art(p1, p2):
     art1 = ascii_art.get_art(p1).split('\n')
     art2 = ascii_art.get_art(p2).split('\n')
 
+    # Pad the shorter art with blank lines to match the height of the taller one
     while len(art1) < len(art2):
         art1.append('')
     while len(art2) < len(art1):
@@ -40,6 +41,7 @@ def watch_battle(p1, p2):
     """Prints the battle log with colors and styles."""
     console.print("\nConnecting to the battle server...", style="yellow")
     try:
+        # Note: This endpoint is for a random battle, not the LLM one.
         response = requests.post(f"http://127.0.0.1:8000/tool/battle?pokemon1={p1}&pokemon2={p2}")
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
@@ -54,21 +56,26 @@ def watch_battle(p1, p2):
     console.print("\n--- Battle Starting! ---\n", style="bold magenta")
     time.sleep(1)
     
-    for line in data["log"]:
-        if "super effective" in line:
-            console.print(line, style="bold green")
-        elif "not very effective" in line:
-            console.print(line, style="dim yellow")
-        elif "fainted" in line or "deals" in line:
-            console.print(line, style="bold red")
-        elif "afflicted" in line or "hurt by" in line:
-            console.print(line, style="cyan")
-        else:
-            console.print(line)
-        time.sleep(1.5)
+    # This logic assumes the 'log' is a simple list of strings from your basic battle endpoint
+    if isinstance(data.get("log"), list):
+        for line in data["log"]:
+            if "super effective" in line:
+                console.print(line, style="bold green")
+            elif "not very effective" in line:
+                console.print(line, style="dim yellow")
+            elif "fainted" in line or "deals" in line:
+                console.print(line, style="bold red")
+            elif "afflicted" in line or "hurt by" in line:
+                console.print(line, style="cyan")
+            else:
+                console.print(line)
+            time.sleep(1.5)
         
-    console.print("\n--- Battle Over! ---", style="bold magenta")
-    console.print(f"🏆 The winner is {data['winner'].title()}! 🏆", style="bold yellow on blue")
+        console.print("\n--- Battle Over! ---", style="bold magenta")
+        console.print(f"🏆 The winner is {data['winner'].title()}! 🏆", style="bold yellow on blue")
+    else:
+        console.print("Received an unexpected battle log format from the server.", style="bold red")
+
 
 def main():
     """Main function to run the interactive menu."""

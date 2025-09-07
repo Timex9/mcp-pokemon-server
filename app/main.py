@@ -12,12 +12,10 @@ app = FastAPI(
 
 templates = Jinja2Templates(directory="templates")
 
-# We still include the original API routers for tools like the terminal viewer
 app.include_router(resource.router, prefix="/resource", tags=["Pokémon Data Resource"])
 app.include_router(tool.router, prefix="/tool", tags=["Battle Simulation Tool"])
 
 
-# This endpoint shows the initial page with the form
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     pokemon_list = await poke_api.get_all_pokemon_names()
@@ -26,7 +24,6 @@ async def read_root(request: Request):
         {"request": request, "pokemon_list": pokemon_list}
     )
 
-# This new endpoint handles the Player vs. Player battle submission
 @app.post("/battle-pvp", response_class=HTMLResponse)
 async def run_pvp_battle(request: Request, pokemon1: str = Form(), pokemon2: str = Form()):
     pokemon_list = await poke_api.get_all_pokemon_names()
@@ -40,7 +37,6 @@ async def run_pvp_battle(request: Request, pokemon1: str = Form(), pokemon2: str
         }
     )
 
-# This new endpoint handles the Player vs. LLM battle submission
 @app.post("/battle-llm", response_class=HTMLResponse)
 async def run_llm_battle(request: Request, pokemon1: str = Form(), pokemon2: str = Form()):
     pokemon_list = await poke_api.get_all_pokemon_names()

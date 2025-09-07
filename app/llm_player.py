@@ -1,12 +1,9 @@
-# app/llm_player.py
+# llm_player.py
 import google.generativeai as genai
 import os
 
-# --- IMPORTANT: PASTE YOUR API KEY HERE ---
-# For better security, it's good practice to set this as an environment variable,
-# but for this project, pasting it here is fine.
 API_KEY = 'AIzaSyCuqTmnTPhNQAjp1rtisld8xWSQgBXiYn0'
-# -----------------------------------------
+
 
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-1.5-flash')
@@ -18,7 +15,6 @@ def construct_prompt(battle_state):
     opponent_pokemon = battle_state['opponent_pokemon']
     my_moves = battle_state['my_moves']
 
-    # Create a simple, numbered list of moves for the LLM
     move_list_str = "\n".join([f"- {move}" for move in my_moves])
 
     prompt = f"""
@@ -44,17 +40,13 @@ async def choose_move(battle_state):
     prompt = construct_prompt(battle_state)
     try:
         response = await model.generate_content_async(prompt)
-        # Clean up the response to get just the move name
         chosen_move = response.text.strip().lower()
 
-        # Final check to ensure the chosen move is valid
         if chosen_move in battle_state['my_moves']:
             return chosen_move
         else:
-            # If the LLM hallucinates a move, fall back to a random choice
             return "random"
 
     except Exception as e:
         print(f"Error calling Gemini API: {e}")
-        # As a fallback, just pick a random move
         return "random"

@@ -1,11 +1,9 @@
-# app/endpoints/resource.py
+#resource.py
 from fastapi import APIRouter, HTTPException
 from .. import poke_api, models
 
 router = APIRouter()
 
-# --- CORRECT ORDER ---
-# The specific path '/list' now comes BEFORE the dynamic path '/{pokemon_name}'
 
 @router.get("/pokemon/list")
 async def get_pokemon_list():

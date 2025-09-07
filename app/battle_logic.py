@@ -1,4 +1,4 @@
-# app/battle_logic.py
+#battle_logic.py
 from . import llm_player
 from . import poke_api
 import math
@@ -85,7 +85,6 @@ def apply_status_effect(attacker_data):
         return random.choice(["poison", "burn", "paralysis"])
     return None
 
-# In app/battle_logic.py
 async def simulate_battle(pokemon1_name: str, pokemon2_name: str, llm_trainer_name: str = None):
     p1_data = await poke_api.get_pokemon_data(pokemon1_name)
     p2_data = await poke_api.get_pokemon_data(pokemon2_name)
@@ -114,8 +113,7 @@ async def simulate_battle(pokemon1_name: str, pokemon2_name: str, llm_trainer_na
 
         chosen_move_info = None
         if attacker['name'] == llm_trainer_name:
-            # (LLM logic is the same)
-            pass # Abridged for clarity
+            pass 
         
         if chosen_move_info is None:
             damage_moves = [m['move'] for m in attacker['moves']]
@@ -148,7 +146,7 @@ async def simulate_battle(pokemon1_name: str, pokemon2_name: str, llm_trainer_na
 
     winner_name = p1_data['name'] if p1_hp > 0 else p2_data['name']
     
-    # --- NEW: ADDING STATS TO THE RETURN DATA ---
+
     p1_stats = [{"name": s['stat']['name'], "value": s['base_stat']} for s in p1_data['stats']]
     p2_stats = [{"name": s['stat']['name'], "value": s['base_stat']} for s in p2_data['stats']]
 
